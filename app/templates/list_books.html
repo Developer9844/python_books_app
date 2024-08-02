@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>List of Books</title>
+</head>
+
+<body>
+    <h1>List of Books</h1>
+    <ul>
+        {% for book in books %}
+        <li>
+            {{ book }}
+            {% if book.read %}
+            <a href="{{ url_for('mark_unread', index=loop.index0) }}">Mark as Unread</a>
+            {% else %}
+            <a href="{{ url_for('mark_read', index=loop.index0) }}">Mark as Read</a>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('index') }}">Back to Home</a>
+</body>
+
+</html>
