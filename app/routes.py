@@ -29,10 +29,28 @@ def mark_read(index):
 @app.route('/mark_unread/<int:index>')
 def mark_unread(index):
     try:
-        # This is a workaround to mark a book as unread by setting the `read` attribute to False
-        # Alternatively, you could add a method in Library to mark a book as unread
         book = library.list_books()[index]
         book.read = False
+    except IndexError:
+        pass
+    return redirect(url_for('list_books'))
+
+@app.route('/edit_book/<int:index>', methods=['GET', 'POST'])
+def edit_book(index):
+    try:
+        book = library.list_books()[index]
+        if request.method == 'POST':
+            new_title = request.form['title']
+            book.title = new_title
+            return redirect(url_for('list_books'))
+        return render_template('edit_book.html', book=book, index=index)
+    except IndexError:
+        return redirect(url_for('list_books'))
+
+@app.route('/delete_book/<int:index>')
+def delete_book(index):
+    try:
+        del library.list_books()[index]
     except IndexError:
         pass
     return redirect(url_for('list_books'))
